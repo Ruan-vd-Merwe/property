@@ -7,7 +7,7 @@ altair==5.5.0
 annotated-types==0.7.0
 anyio==4.6.2.post1
 tableauserverclient==0.37
-urllib3==2.2.2
+urllib3>=2.2.2,<3
 apache-airflow==2.10.5
 apache-airflow-providers-common-compat==1.6.0
 apache-airflow-providers-common-io==1.5.2
