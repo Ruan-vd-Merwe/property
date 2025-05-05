@@ -48,8 +48,19 @@ if os.path.exists("property_data.csv"):
             scraped_links = set(row["URL"] for row in reader)
 
 # ─── Load URLs from the correct file ─────────────────────────────────────
-with open("property_urls.csv", "r", encoding="utf-8") as f:
-    all_links = [line.strip() for line in f if line.strip()]
+def get_urls_from_snowflake(conn, table_name="property_master", url_column="URL"):
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute(f"SELECT {url_column} FROM {table_name}")
+            results = cursor.fetchall()
+            return [row[0] for row in results if row[0]]
+    except Exception as e:
+        print(f"❌ Error fetching URLs from Snowflake: {e}")
+        return []
+
+# ─── Load URLs from Snowflake ────────────────────────────────────────────
+conn = connect_to_snowflake()
+all_links = get_urls_from_snowflake(conn)
 
 links_to_scrape = [link for link in all_links if link not in scraped_links]
 print(f"📌 {len(links_to_scrape)} new listings to scrape")
