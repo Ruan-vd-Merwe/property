@@ -2,7 +2,7 @@ name: Scrape Property Data
 
 on:
   schedule:
-    - cron: '19 16 * * *'  # This cron job will run daily at 13:00 UTC
+    - cron: '59 16 * * *'  # This cron job will run daily at 13:00 UTC
   push:
     branches:
       - main  # Trigger the workflow on push to the main branch
@@ -14,6 +14,14 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
+
+      - name: Setup Fluxbox and Xvfb
+        if: inputs.os == 'ubuntu' && inputs.browser != ''
+        run: |
+          sudo apt-get -y install fluxbox
+          Xvfb :99 &
+          fluxbox -display :99 &
+          echo "DISPLAY=:99" >> "$GITHUB_ENV"
 
       - name: Set up Python
         uses: actions/setup-python@v4
