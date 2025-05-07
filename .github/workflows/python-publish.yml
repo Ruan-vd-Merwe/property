@@ -2,7 +2,7 @@ name: Scrape Property Data
 
 on:
   schedule:
-    - cron: '57 14 * * *'  # This cron job will run daily at 13:00 UTC
+    - cron: '03 15 * * *'  # This cron job will run daily at 13:00 UTC
   push:
     branches:
       - main  # Trigger the workflow on push to the main branch
@@ -28,9 +28,9 @@ jobs:
       - name: Set up Chrome options with unique user data directory
         run: |
           mkdir -p /tmp/selenium_user_data  # Create a temporary directory for user data
-          echo "export USER_DATA_DIR=/tmp/selenium_user_data" >> $GITHUB_ENV  # Set the environment variable
+          echo "USER_DATA_DIR=/tmp/selenium_user_data" >> $GITHUB_ENV  # Set the environment variable for subsequent steps
 
-      - name: Run 1_property_urls.py
+      - name: Run 1_property_urls.py with Selenium
         run: |
           python -c "
           from selenium import webdriver
@@ -38,7 +38,7 @@ jobs:
           import os
 
           chrome_options = Options()
-          chrome_options.add_argument('--user-data-dir=' + os.environ['USER_DATA_DIR'])
+          chrome_options.add_argument('--user-data-dir=' + os.getenv('USER_DATA_DIR'))  # Get the USER_DATA_DIR environment variable
 
           driver = webdriver.Chrome(options=chrome_options)
           driver.get('https://www.example.com')
