@@ -11,12 +11,25 @@ from bs4 import BeautifulSoup
 
 # ----------------- SETUP SELENIUM WITH STEALTH -----------------
 import tempfile
+from webdriver_manager.chrome import ChromeDriverManager
 
 options = Options()
-options.add_argument(r"--user-data-dir=C:\Users\RuanvanderMerwe\Documents\Code\Python_Training\prop24-scrape\git_streamlit_prop24\property-1\chrome_user_data")
 options.add_argument("--disable-blink-features=AutomationControlled")
 options.add_argument("--window-size=1920,1080")
 options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36")
+
+# Optional: headless for CI environments
+# options.add_argument("--headless=new")
+
+# # Automatically download and use correct chromedriver
+# service = Service(ChromeDriverManager().install())
+# driver = webdriver.Chrome(service=service, options=options)
+
+# options = Options()
+# options.add_argument(r"--user-data-dir=C:\Users\RuanvanderMerwe\Documents\Code\Python_Training\prop24-scrape\git_streamlit_prop24\property-1\chrome_user_data")
+# options.add_argument("--disable-blink-features=AutomationControlled")
+# options.add_argument("--window-size=1920,1080")
+# options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36")
 
 # Uncomment this if you want a truly unique session each time
 # options.add_argument(f"--user-data-dir={tempfile.mkdtemp()}")
