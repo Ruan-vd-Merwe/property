@@ -39,13 +39,13 @@ def connect_to_snowflake():
 # ─── File Setup ──────────────────────────────────────────────────────────
 failed_file = "failed_urls.csv"
 
-# ─── Load Previously Scraped URLs ────────────────────────────────────────
-scraped_links = set()
-if os.path.exists("property_data.csv"):
-    with open("property_data.csv", "r", encoding="utf-8") as f:
-        reader = csv.DictReader(f)
-        if "URL" in reader.fieldnames:
-            scraped_links = set(row["URL"] for row in reader)
+# # ─── Load Previously Scraped URLs ────────────────────────────────────────
+# scraped_links = set()
+# if os.path.exists("property_data.csv"):
+#     with open("property_data.csv", "r", encoding="utf-8") as f:
+#         reader = csv.DictReader(f)
+#         if "URL" in reader.fieldnames:
+#             scraped_links = set(row["URL"] for row in reader)
 
 # ─── Load URLs from the correct file ─────────────────────────────────────
 def get_urls_from_snowflake(conn, table_name="property_master", url_column="URL"):
