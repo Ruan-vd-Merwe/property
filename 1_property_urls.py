@@ -16,7 +16,7 @@ import tempfile
 
 
 options = Options()
-options.add_argument("--C:\Users\RuanvanderMerwe\Documents\Code\Python_Training\prop24-scrape\git_streamlit_prop24\property-1\chrome_user_data")
+options.add_argument("C:\Users\RuanvanderMerwe\Documents\Code\Python_Training\prop24-scrape\git_streamlit_prop24\property-1\chrome_user_data")
 
 driver = webdriver.Chrome(service=Service(), options=options)
 
