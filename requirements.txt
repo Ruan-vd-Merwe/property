@@ -6,3 +6,4 @@ snowflake-connector-python
 streamlit
 altair
 pandas
+selenium_stealth
