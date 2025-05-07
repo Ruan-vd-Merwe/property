@@ -15,21 +15,18 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 
 options = Options()
-<<<<<<< HEAD
-=======
 # options.add_argument(r"--user-data-dir=C:\Users\RuanvanderMerwe\Documents\Code\Python_Training\prop24-scrape\git_streamlit_prop24\property-1\chrome_user_data")
->>>>>>> 3910c110caa6d52e49d9c7a4e6835202a3a24697
+
 options.add_argument("--disable-blink-features=AutomationControlled")
 options.add_argument("--window-size=1920,1080")
 options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36")
 
-<<<<<<< HEAD
 # Optional: headless for CI environments
 # options.add_argument("--headless=new")
 
 # # Automatically download and use correct chromedriver
-# service = Service(ChromeDriverManager().install())
-# driver = webdriver.Chrome(service=service, options=options)
+service = Service(ChromeDriverManager().install())
+driver = webdriver.Chrome(service=service, options=options)
 
 # options = Options()
 # options.add_argument(r"--user-data-dir=C:\Users\RuanvanderMerwe\Documents\Code\Python_Training\prop24-scrape\git_streamlit_prop24\property-1\chrome_user_data")
@@ -43,11 +40,10 @@ options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) Apple
 # Uncomment this if you want headless browsing
 =======
 # Optional for headless operation:
->>>>>>> 3910c110caa6d52e49d9c7a4e6835202a3a24697
 # options.add_argument("--headless=new")
 
-service = Service(executable_path=r"C:\Users\RuanvanderMerwe\.wdm\drivers\chromedriver\win64\135.0.7049.114\chromedriver-win32\chromedriver.exe")
-driver = webdriver.Chrome(service=service, options=options)
+# service = Service(executable_path=r"C:\Users\RuanvanderMerwe\.wdm\drivers\chromedriver\win64\135.0.7049.114\chromedriver-win32\chromedriver.exe")
+# driver = webdriver.Chrome(service=service, options=options)
 
 
 stealth(driver,
