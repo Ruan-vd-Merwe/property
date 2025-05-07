@@ -77,29 +77,11 @@ if conn:
         df['FLOOR_SIZE_CLEAN'] = clean_size_column(df['FLOOR_SIZE']).astype(float)
         df['SUB_DIVIDABLE_AREA'] = df['ERF_SIZE_CLEAN'] - df['FLOOR_SIZE_CLEAN']
 
-        # # Chart 1: Sub-dividable
-        # df_subdividable = df[df['SUB_DIVIDABLE_AREA'] >= 500].copy()
-        # df_subdividable = df_subdividable.sort_values(by='SUB_DIVIDABLE_AREA', ascending=False)
-
-        # st.subheader("📊 Sub-dividable Properties (≥ 500 m² extra space)")
-        # chart1 = alt.Chart(df_subdividable).mark_bar().encode(
-        #     x=alt.X('LISTING_NUMBER:N', sort='-y', title='Property Address'),
-        #     y=alt.Y('SUB_DIVIDABLE_AREA:Q', title='Sub-dividable Area (m²)'),
-        #     tooltip=['LISTING_NUMBER', 'SUB_DIVIDABLE_AREA']
-        # ).properties(
-        #     width=600,
-        #     height=400
-        # )
-        # st.altair_chart(chart1, use_container_width=True)
-
-
-    # --- List Top 10 Properties by ERF-to-Floor Ratio (cleaned and simplified)
-    # --- Filter: Only use properties where LIFESTYLE is 'na' or blank
-      # Filter properties with LIFESTYLE == 'na' and TYPE_OF_PROPERTY != 'Apartment / Flat'
+        
         df_filtered = df[
             (df['LIFESTYLE'].str.lower() == 'na') &
             (df['TYPE_OF_PROPERTY'].str.lower() != 'apartment / flat')
-        ].copy()
+            ].copy()
 
         # Calculate ERF to FLOOR size ratio
         df_filtered['ERF_TO_FLOOR_RATIO'] = df_filtered['ERF_SIZE_CLEAN'] / df_filtered['FLOOR_SIZE_CLEAN']
