@@ -2,7 +2,7 @@ name: Scrape Property Data
 
 on:
   schedule:
-    - cron: '12 16 * * *'  # This cron job will run daily at 13:00 UTC
+    - cron: '17 16 * * *'  # This cron job will run daily at 13:00 UTC
   push:
     branches:
       - main  # Trigger the workflow on push to the main branch
