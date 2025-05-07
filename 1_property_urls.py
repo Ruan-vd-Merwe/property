@@ -10,10 +10,17 @@ from selenium_stealth import stealth
 from bs4 import BeautifulSoup
 
 # ----------------- SETUP SELENIUM WITH STEALTH -----------------
+import tempfile
+
+# ...
+
 options = Options()
 options.add_argument("--disable-blink-features=AutomationControlled")
 options.add_argument("--window-size=1920,1080")
 options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36")
+
+# Use a unique, temporary user data dir to avoid profile lock errors
+options.add_argument(f"--user-data-dir={tempfile.mkdtemp()}")
 
 # Use headless only if needed; comment out for debugging
 # options.add_argument("--headless=new")
