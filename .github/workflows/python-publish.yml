@@ -2,7 +2,7 @@ name: Scrape Property Data
 
 on:
   schedule:
-    - cron: '08 15 * * *'  # This cron job will run daily at 13:00 UTC
+    - cron: '20 15 * * *'  # This cron job will run daily at 13:00 UTC
   push:
     branches:
       - main  # Trigger the workflow on push to the main branch
@@ -25,20 +25,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run 1_property_urls.py without user-data-dir
-        run: |
-          python -c "
-          from selenium import webdriver
-          from selenium.webdriver.chrome.options import Options
-
-          chrome_options = Options()
-          # No --user-data-dir argument
-
-          driver = webdriver.Chrome(options=chrome_options)
-          driver.get('https://www.example.com')
-          driver.quit()
-          "
-          python 1_property_urls.py
+      - name: Run 1_property_urls.py
+        run: python 1_property_urls.py
 
       - name: Run add_to_snowflake.py
         run: python add_to_snowflake.py
