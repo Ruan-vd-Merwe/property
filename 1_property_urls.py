@@ -38,7 +38,6 @@ driver = webdriver.Chrome(service=service, options=options)
 # options.add_argument(f"--user-data-dir={tempfile.mkdtemp()}")
 
 # Uncomment this if you want headless browsing
-=======
 # Optional for headless operation:
 # options.add_argument("--headless=new")
 
