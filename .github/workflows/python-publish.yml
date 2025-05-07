@@ -2,7 +2,7 @@ name: Scrape Property Data
 
 on:
   schedule:
-    - cron: '33 14 * * *'  # This cron job will run daily at 13:00 UTC
+    - cron: '51 14 * * *'  # This cron job will run daily at 13:00 UTC
   push:
     branches:
       - main  # Trigger the workflow on push to the main branch
@@ -25,8 +25,26 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Set up Chrome options with unique user data directory
+        run: |
+          mkdir -p /tmp/selenium_user_data  # Create a temporary directory for user data
+          echo "export USER_DATA_DIR=/tmp/selenium_user_data" >> $GITHUB_ENV  # Set the environment variable
+
       - name: Run 1_property_urls.py
-        run: python 1_property_urls.py
+        run: |
+          python -c "
+          from selenium import webdriver
+          from selenium.webdriver.chrome.options import Options
+          import os
+
+          chrome_options = Options()
+          chrome_options.add_argument('--user-data-dir=' + os.environ['USER_DATA_DIR'])
+
+          driver = webdriver.Chrome(options=chrome_options)
+          driver.get('https://www.example.com')
+          driver.quit()
+          "
+          python 1_property_urls.py
 
       - name: Run add_to_snowflake.py
         run: python add_to_snowflake.py
