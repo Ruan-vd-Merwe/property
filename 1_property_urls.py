@@ -10,10 +10,11 @@ from selenium_stealth import stealth
 from bs4 import BeautifulSoup
 from webdriver_manager.chrome import ChromeDriverManager
 import tempfile
-from webdriver_manager.utils import ChromeType
+# from webdriver_manager.utils import ChromeType
 
 
-chrome_service = Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install())
+# chrome_service = Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install())
+ChromeDriverManager().install()
 
 chrome_options = Options()
 options = [
