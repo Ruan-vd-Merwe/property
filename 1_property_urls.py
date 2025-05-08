@@ -68,7 +68,7 @@ options.add_argument("--headless=new")  # Headless is required in CI
 # options.add_argument(f"--user-data-dir={tempfile.mkdtemp()}")  # Use a temporary profile to avoid conflicts
 
 # Setup driver service
-service = Service(ChromeDriverManager().install())
+service = Service(ChromeDriverManager().install()   )
 driver = webdriver.Chrome(service=service, options=options)
 
 # Stealth settings
