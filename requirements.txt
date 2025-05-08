@@ -8,3 +8,4 @@ altair
 pandas
 selenium_stealth
 webdriver_manager
+pyarrow==18.0.0
