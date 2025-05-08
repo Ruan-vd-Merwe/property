@@ -21,8 +21,8 @@ jobs:
         run: sudo apt install -y chromium-browser
       - name: Install all necessary packages
         run: pip install requests beautifulsoup4 pandas webdriver-manager selenium
-      - name: Run the scraping script
-        run: python scraper.py
+      # - name: Run the scraping script
+      #   run: python scraper.py
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
