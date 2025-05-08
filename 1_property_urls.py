@@ -10,8 +10,25 @@ from selenium_stealth import stealth
 from bs4 import BeautifulSoup
 from webdriver_manager.chrome import ChromeDriverManager
 import tempfile
+from webdriver_manager.utils import ChromeType
 
 
+chrome_service = Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install())
+
+chrome_options = Options()
+options = [
+    "--headless",
+    "--disable-gpu",
+    "--window-size=1920,1200",
+    "--ignore-certificate-errors",
+    "--disable-extensions",
+    "--no-sandbox",
+    "--disable-dev-shm-usage"
+]
+for option in options:
+    chrome_options.add_argument(option)
+
+driver = webdriver.Chrome(service=chrome_service, options=chrome_options)
 # # ----------------- SETUP SELENIUM WITH STEALTH -----------------
 
 
@@ -60,26 +77,26 @@ import tempfile
 
 
 # Setup Chrome options
-options = Options()
-options.add_argument("--disable-blink-features=AutomationControlled")
-options.add_argument("--window-size=1920,1080")
-options.add_argument("--headless=new")  # Headless is required in CI
-# options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36")
-# options.add_argument(f"--user-data-dir={tempfile.mkdtemp()}")  # Use a temporary profile to avoid conflicts
+# options = Options()
+# options.add_argument("--disable-blink-features=AutomationControlled")
+# options.add_argument("--window-size=1920,1080")
+# options.add_argument("--headless=new")  # Headless is required in CI
+# # options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36")
+# # options.add_argument(f"--user-data-dir={tempfile.mkdtemp()}")  # Use a temporary profile to avoid conflicts
 
-# Setup driver service
-service = Service(ChromeDriverManager().install())
-driver = webdriver.Chrome(service=service, options=options)
+# # Setup driver service
+# service = Service(ChromeDriverManager().install())
+# driver = webdriver.Chrome(service=service, options=options)
 
-# Stealth settings
-stealth(driver,
-    languages=["en-US", "en"],
-    vendor="Google Inc.",
-    platform="Win32",
-    webgl_vendor="Intel Inc.",
-    renderer="Intel Iris OpenGL Engine",
-    fix_hairline=True,
-)
+# # Stealth settings
+# stealth(driver,
+#     languages=["en-US", "en"],
+#     vendor="Google Inc.",
+#     platform="Win32",
+#     webgl_vendor="Intel Inc.",
+#     renderer="Intel Iris OpenGL Engine",
+#     fix_hairline=True,
+# )
 
 wait = WebDriverWait(driver, 10)
 
