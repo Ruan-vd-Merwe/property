@@ -5,7 +5,7 @@ on:
     branches:
       - main
   schedule:
-    - cron: '20 17 * * *'  # Daily at 6 AM UTC
+    - cron: '28 10 * * *'  # Daily at 6 AM UTC
 
   workflow_dispatch:
 
