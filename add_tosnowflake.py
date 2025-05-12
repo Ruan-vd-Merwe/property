@@ -48,7 +48,7 @@ failed_file = "failed_urls.csv"
 #             scraped_links = set(row["URL"] for row in reader)
 
 # ─── Load URLs from the correct file ─────────────────────────────────────
-def get_urls_from_snowflake(conn, table_name="property_master", url_column="URL"):
+def get_urls_from_snowflake(conn, table_name="MASTER_PROPERTIES", url_column="URL"):
     try:
         with conn.cursor() as cursor:
             cursor.execute(f"SELECT {url_column} FROM {table_name}")

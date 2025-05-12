@@ -10,76 +10,31 @@ from selenium_stealth import stealth
 from bs4 import BeautifulSoup
 from webdriver_manager.chrome import ChromeDriverManager
 import tempfile
+from webdriver_manager.core.utils import ChromeType
 
 
+# chrome_service = Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install())
+chrome_service = Service(ChromeDriverManager(version="114.0.5735.90").install())
+
+
+ChromeDriverManager().install()
+
+chrome_options = Options()
+options = [
+    "--headless",
+    "--disable-gpu",
+    "--window-size=1920,1200",
+    "--ignore-certificate-errors",
+    "--disable-extensions",
+    "--no-sandbox",
+    "--disable-dev-shm-usage"
+]
+for option in options:
+    chrome_options.add_argument(option)
+
+driver = webdriver.Chrome(service=chrome_service, options=chrome_options)
 # # ----------------- SETUP SELENIUM WITH STEALTH -----------------
 
-
-
-# options = Options()
-# # options.add_argument(r"--user-data-dir=C:\Users\RuanvanderMerwe\Documents\Code\Python_Training\prop24-scrape\git_streamlit_prop24\property-1\chrome_user_data")
-
-# options.add_argument("--disable-blink-features=AutomationControlled")
-# options.add_argument("--window-size=1920,1080")
-# options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36")
-
-# # Optional: headless for CI environments
-# # options.add_argument("--headless=new")
-
-# # # Automatically download and use correct chromedriver
-# service = Service(ChromeDriverManager().install())
-# driver = webdriver.Chrome(service=service, options=options)
-
-# # options = Options()
-# # options.add_argument(r"--user-data-dir=C:\Users\RuanvanderMerwe\Documents\Code\Python_Training\prop24-scrape\git_streamlit_prop24\property-1\chrome_user_data")
-# # options.add_argument("--disable-blink-features=AutomationControlled")
-# # options.add_argument("--window-size=1920,1080")
-# # options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36")
-
-# # Uncomment this if you want a truly unique session each time
-# # options.add_argument(f"--user-data-dir={tempfile.mkdtemp()}")
-
-# # Uncomment this if you want headless browsing
-# # Optional for headless operation:
-# # options.add_argument("--headless=new")
-
-# # service = Service(executable_path=r"C:\Users\RuanvanderMerwe\.wdm\drivers\chromedriver\win64\135.0.7049.114\chromedriver-win32\chromedriver.exe")
-# # driver = webdriver.Chrome(service=service, options=options)
-
-
-# stealth(driver,
-#     languages=["en-US", "en"],
-#     vendor="Google Inc.",
-#     platform="Win32",
-#     webgl_vendor="Intel Inc.",
-#     renderer="Intel Iris OpenGL Engine",
-#     fix_hairline=True,
-# )
-
-
-
-
-# Setup Chrome options
-options = Options()
-options.add_argument("--disable-blink-features=AutomationControlled")
-options.add_argument("--window-size=1920,1080")
-options.add_argument("--headless=new")  # Headless is required in CI
-# options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36")
-# options.add_argument(f"--user-data-dir={tempfile.mkdtemp()}")  # Use a temporary profile to avoid conflicts
-
-# Setup driver service
-service = Service(ChromeDriverManager().install()   )
-driver = webdriver.Chrome(service=service, options=options)
-
-# Stealth settings
-stealth(driver,
-    languages=["en-US", "en"],
-    vendor="Google Inc.",
-    platform="Win32",
-    webgl_vendor="Intel Inc.",
-    renderer="Intel Iris OpenGL Engine",
-    fix_hairline=True,
-)
 
 wait = WebDriverWait(driver, 10)
 

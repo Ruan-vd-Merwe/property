@@ -7,4 +7,5 @@ streamlit
 altair
 pandas
 selenium_stealth
-webdriver_manager
+webdriver-manager==4.0.1
+pyarrow<19.0.0
