@@ -16,18 +16,18 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: '3.12.10'
 
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
 
       - name: Run 1_property_urls.py
-        run: python property-1/1_property_urls.py
+        run: python 1_property_urls.py
 
       - name: Run add_tosnowflake.py
-        run: python property-1/add_tosnowflake.py
+        run: python add_tosnowflake.py
 
       - name: Run Streamlit app (optional, headless)
-        run: streamlit run property-1/app.py &
+        run: streamlit run app.py &
         shell: bash
