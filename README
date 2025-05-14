@@ -1,0 +1,9 @@
+Run python 1_property_urls.py
+- Scrape the urls of all the properties in Paarl
+
+This will create a property_urls file, containing the urls, price, and the date the urls where scraped.
+
+Run python add_tosnowflake.py --mode normal
+- This will run all the urls.
+After this have run, there might be failed urls, if you want to rerun the code, but only with the failed urls:
+Run python add_tosnowflake --mode failed
