@@ -14,7 +14,12 @@ import random
 options = Options()
 options.add_argument("--window-size=1920,1080")
 options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36")
-driver = webdriver.Chrome(service=Service(), options=options)
+options.add_argument("--headless")  # Optional: for GitHub Actions or server environments
+options.add_argument("--no-sandbox")
+options.add_argument("--disable-dev-shm-usage")
+# driver = webdriver.Chrome(service=Service(), options=options)
+driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+
 
 # Go to first page to detect total number of pages
 start_url = "https://www.property24.com/for-sale/paarl/western-cape/344"
