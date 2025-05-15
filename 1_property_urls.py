@@ -24,7 +24,10 @@ options.add_argument('--remote-debugging-port=9222')
 options.add_argument('--aggressive-cache-discard')
 
 # service = Service(r"C:\Users\RuanvanderMerwe\.wdm\drivers\chromedriver\win64\135.0.7049.114\chromedriver-win32\chromedriver.exe")
-service = Service(ChromeDriverManager(driver_version='114.0.5735.90').install())
+# service = Service(ChromeDriverManager(driver_version='114.0.5735.90').install())
+# driver = webdriver.Chrome(service=service, options=options)
+# Automatically match ChromeDriver to installed browser
+service = Service(ChromeDriverManager().install())
 driver = webdriver.Chrome(service=service, options=options)
 
 # Go to first page to detect total number of pages
