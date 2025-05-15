@@ -6,6 +6,6 @@ streamlit
 altair
 pandas
 selenium_stealth
-selenium==4.19.0
-webdriver-manager==3.8.6
+selenium==4.28.1
+webdriver-manager==4.0.2
 pyarrow<19.0.0
