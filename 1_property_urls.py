@@ -1,103 +1,96 @@
-import time
-import random
+from webdriver_manager.chrome import ChromeDriverManager
 from selenium import webdriver
+
+driver = webdriver.Chrome(ChromeDriverManager().install())
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium_stealth import stealth
-from bs4 import BeautifulSoup
-from webdriver_manager.chrome import ChromeDriverManager
-import tempfile
-from webdriver_manager.core.utils import ChromeType
+from datetime import datetime
+import csv
+import time
+import random
 
+# Configure browser
+options = Options()
+options.add_argument("--window-size=1920,1080")
+options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36")
+driver = webdriver.Chrome(service=Service(), options=options)
 
-# chrome_service = Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install())
-chrome_service = Service(ChromeDriverManager(version="114.0.5735.90").install())
-
-
-ChromeDriverManager().install()
-
-chrome_options = Options()
-options = [
-    "--headless",
-    "--disable-gpu",
-    "--window-size=1920,1200",
-    "--ignore-certificate-errors",
-    "--disable-extensions",
-    "--no-sandbox",
-    "--disable-dev-shm-usage"
-]
-for option in options:
-    chrome_options.add_argument(option)
-
-driver = webdriver.Chrome(service=chrome_service, options=chrome_options)
-# # ----------------- SETUP SELENIUM WITH STEALTH -----------------
-
-
-wait = WebDriverWait(driver, 10)
-
-
-# ----------------- EXTRACT FUNCTION -----------------
-def extract_property_data(soup, link):
-    clean = lambda x: x.strip().lower() if isinstance(x, str) else None
-    property_info = {"url": clean(link)}
-
-    price_tag = soup.select_one(".p24_price")
-    address_tag = soup.select_one(".js_displayMap.p24_address")
-    title_tag = soup.select_one("h1.p24_title")
-
-    property_info["price"] = clean(price_tag.get_text()) if price_tag else None
-    property_info["suburb"] = clean(address_tag.get_text()) if address_tag else None
-    property_info["title"] = clean(title_tag.get_text()) if title_tag else None
-
-    return property_info
-
-# ----------------- SCRAPE LISTING PAGES -----------------
-property_urls = []
+# Go to first page to detect total number of pages
 start_url = "https://www.property24.com/for-sale/paarl/western-cape/344"
 driver.get(start_url)
+time.sleep(random.uniform(3.0, 5.0))
 
-# Wait until pagination is visible or timeout
 try:
-    wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "ul.pagination a[data-pagenumber]")))
     pagination_links = driver.find_elements(By.CSS_SELECTOR, "ul.pagination a[data-pagenumber]")
     page_numbers = [int(link.get_attribute("data-pagenumber")) for link in pagination_links if link.get_attribute("data-pagenumber").isdigit()]
     max_page = max(page_numbers) if page_numbers else 1
 except Exception as e:
-    print("⚠️ Failed to get number of pages:", e)
+    print("⚠️ Could not determine total pages. Defaulting to 1:", e)
     max_page = 1
 
-print(f"📄 Total pages to scrape: {max_page}")
+print(f"🔍 Total pages found: {max_page}")
+
+property_data = []
 
 for page in range(1, max_page + 1):
-    print(f"📄 Scraping page {page}")
+    print(f"Scraping page {page}")
     url = f"https://www.property24.com/for-sale/paarl/western-cape/344/p{page}"
     driver.get(url)
+    time.sleep(random.uniform(2.5, 5.0))
 
-    try:
-        wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "div.p24_tileContainer a[href*='/for-sale/']")))
-        listings = driver.find_elements(By.CSS_SELECTOR, "div.p24_tileContainer a[href*='/for-sale/']")
-        page_links = list(set([elem.get_attribute("href") for elem in listings if elem.get_attribute("href")]))
-        print(f"  🔗 Found {len(page_links)} property links")
-    except Exception as e:
-        print(f"⚠️ Failed to load listings on page {page}: {e}")
-        page_links = []
-
-    for link in page_links:
+    listings = driver.find_elements(By.CSS_SELECTOR, "div.p24_tileContainer")
+    for listing in listings:
         try:
-            driver.get(link)
-            wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, ".p24_price")))
-            soup = BeautifulSoup(driver.page_source, "html.parser")
-            prop_data = extract_property_data(soup, link)
-            property_urls.append(prop_data)
-            time.sleep(random.uniform(1.2, 2.0))  # mild delay between requests
+            link_elem = listing.find_element(By.CSS_SELECTOR, "a[href*='/for-sale/']")
+            price_elem = listing.find_element(By.CSS_SELECTOR, ".p24_price")
+
+            try:
+                size_elem = listing.find_element(By.CSS_SELECTOR, ".p24_size span").text.strip()
+            except:
+                size_elem = "N/A"
+
+            location_elem = listing.find_element(By.CSS_SELECTOR, ".p24_location")
+
+            features = listing.find_elements(By.CSS_SELECTOR, ".p24_featureDetails")
+            bedrooms = bathrooms = parking = "N/A"
+
+            for feature in features:
+                title = feature.get_attribute("title")
+                value = feature.find_element(By.TAG_NAME, "span").text.strip()
+                if title == "Bedrooms":
+                    bedrooms = value
+                elif title == "Bathrooms":
+                    bathrooms = value
+                elif title == "Parking Spaces":
+                    parking = value
+
+            # ✅ Correct indentation here
+            property_data.append({
+                "url": link_elem.get_attribute("href"),
+                "price": price_elem.text.strip(),
+                "size": size_elem,
+                "location": location_elem.text.strip() if location_elem else "N/A",
+                "bedrooms": bedrooms,
+                "bathrooms": bathrooms,
+                "parking": parking,
+                "scraped_at": datetime.now().isoformat()
+            })
+
         except Exception as e:
-            print(f"❌ Failed to scrape {link}: {e}")
+            print(f"⚠️ Skipped one listing due to error: {e}")
 
-# Deduplicate by URL
-property_urls = list({prop['url']: prop for prop in property_urls}.values())
-print(f"🔍 Total unique scraped properties: {len(property_urls)}")
+# Remove duplicates
+unique_data = {item["url"]: item for item in property_data}.values()
 
+# Save to CSV
+with open("property_urls.csv", "w", newline="", encoding="utf-8") as f:
+    writer = csv.DictWriter(f, fieldnames=[
+        "url", "price", "size", "location",
+        "bedrooms", "bathrooms", "parking", "scraped_at"
+    ])
+    writer.writeheader()
+    writer.writerows(unique_data)
+
+print(f"✅ Done. Saved {len(unique_data)} unique properties.")
 driver.quit()
