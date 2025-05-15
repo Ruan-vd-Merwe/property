@@ -8,10 +8,11 @@ import time
 import random
 
 
+driver = webdriver.Chrome(service=Service(ChromeDriverManager(version='114.0.5735.90').install()))
 
 
 # service = Service(r"C:\Users\RuanvanderMerwe\.wdm\drivers\chromedriver\win64\135.0.7049.114\chromedriver-win32\chromedriver.exe")
-driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+# driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 
 
 # Go to first page to detect total number of pages
