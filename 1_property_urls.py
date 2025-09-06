@@ -1,5 +1,6 @@
-from selenium import webdriver
+﻿from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager  # NEW
 from selenium.webdriver.chrome.options import Options
 
@@ -40,10 +41,10 @@ try:
     page_numbers = [int(link.get_attribute("data-pagenumber")) for link in pagination_links if link.get_attribute("data-pagenumber").isdigit()]
     max_page = max(page_numbers) if page_numbers else 1
 except Exception as e:
-    print("⚠️ Could not determine total pages. Defaulting to 1:", e)
+    print(" Could not determine total pages. Defaulting to 1:", e)
     max_page = 1
 
-print(f"🔍 Total pages found: {max_page}")
+print(f" Total pages found: {max_page}")
 
 property_data = []
 
@@ -79,7 +80,7 @@ for page in range(1, max_page + 1):
                 elif title == "Parking Spaces":
                     parking = value
 
-            # ✅ Correct indentation here
+            #  Correct indentation here
             property_data.append({
                 "url": link_elem.get_attribute("href"),
                 "price": price_elem.text.strip(),
@@ -92,7 +93,7 @@ for page in range(1, max_page + 1):
             })
 
         except Exception as e:
-            print(f"⚠️ Skipped one listing due to error: {e}")
+            print(f" Skipped one listing due to error: {e}")
 
 # Remove duplicates
 unique_data = {item["url"]: item for item in property_data}.values()
@@ -106,7 +107,7 @@ with open("property_urls.csv", "w", newline="", encoding="utf-8") as f:
     writer.writeheader()
     writer.writerows(unique_data)
 
-print(f"✅ Done. Saved {len(unique_data)} unique properties.")
+print(f" Done. Saved {len(unique_data)} unique properties.")
 
 
 driver.get('google.com')
